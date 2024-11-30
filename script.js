@@ -16,18 +16,18 @@ element.style.border = "2px solid black";
 document.getElementById("plength").textContent = "Your text here";
 
 
-// document.getElementById('login-btn').addEventListener('click', function () {
-//     const username = document.getElementById('username').value;
-//     const password = document.getElementById('password').value;
+document.getElementById('login-btn').addEventListener('click', function () {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-//     if (password==="1"&&username!="") {
-//         window.location.href = 'game.html';
-//         Player[Player.length]=username;
-//         document.getElementById('plength').innerHTML = "wewe";
+    if (password==="1"&&username!="") {
+        window.location.href = 'game.html';
+        Player[Player.length]=username;
+        document.getElementById('plength').innerHTML = "wewe";
 
 
-//     } else {
-//         window.close();
-//     }
-// });
+    } else {
+        window.close();
+    }
+});
 
