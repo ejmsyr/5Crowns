@@ -1,5 +1,5 @@
 // Simulating player data from login
-const players = ["Alice", "Bob", "Charlie"]; // Replace with dynamically retrieved usernames
+const players = []; // Replace with dynamically retrieved usernames
 
 // Function to update the players in the lobby
 function updatePlayersLobby() {
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", updatePlayersLobby);
 
 // Call the function to display the players in the lobby
 updatePlayersLobby(players);
-
+if(document.title==="5 Crowns - Welcome"){
 document.addEventListener("DOMContentLoaded", () => {
     // Select the Start Game button
     const startGameButton = document.getElementById("start-game-button");
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Start Game button not found.");
     }
 });
-
+}else{
 document.getElementById('login-btn').addEventListener('click', function () {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -53,3 +53,4 @@ document.getElementById('login-btn').addEventListener('click', function () {
         alert("Invalid Password")
     }
 });
+}

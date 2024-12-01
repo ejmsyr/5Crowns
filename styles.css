@@ -73,46 +73,19 @@ button:hover {
 }
 /* Large central table with trapezoidal perspective */
 .game-table {
-    width: 20%; /* Larger table width */
-    height: 40%; /* Larger table height */
+    width: 90%; /* Larger table width */
+    height: 70%; /* Larger table height */
     margin: auto; /* Centers horizontally */
     position: absolute;
-    top: 30%; /* Centers vertically */
-    left: 50%;
-    transform: translate(-90%, -50%) perspective(100px) rotateX(10deg) rotateZ(90deg); /* 3D and rotated 90 degrees */
     background: #34495e; /* Matches the container color */
     border-radius: 10px; /* Rounded edges */
     border: 10px solid #2c3e50; /* Thicker border for definition */
     box-shadow: 0 12px 200px rgba(0, 0, 0, 0.6); /* Adds depth */
     transform-origin: bottom center; /* Tilts from the bottom */
 }
-
-/* Optional: Add seating indicators */
-.seat {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: #0d3672; /* Light color for player seats */
-    border-radius: 50%; /* Circular seating */
-    border: 2px solid #2c3e50; /* Matches the table's theme */
+#turn-indicator {
+    text-align: center;
+    font-size: 1.5rem;
+    color: white;
+    margin-top: 20px;
 }
-
-.seat.top {
-    top: 20%;
-    left: 48%;
-    transform: translateX(-50%);
-}
-
-
-.seat.left {
-    left: 35%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.seat.right {
-    right: 33%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
