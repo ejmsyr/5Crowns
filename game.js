@@ -1,5 +1,4 @@
 const plAr = JSON.parse(localStorage.getItem("playerArray")) || [];
-//console.log(plAr);
 let currentPlayerIndex = 0; // Tracks the current player's turn
 function generateDeck() {
     const suits = ['S', 's', 'C', 'D', 'H']; // Suits: Spades, Clubs, Diamonds, Hearts

@@ -16,11 +16,11 @@ function updatePlayersLobby() {
 }
 
 // Wait for the DOM to load before updating players
-document.addEventListener("DOMContentLoaded", updatePlayersLobby);
+document.addEventListener("DOMContentLoaded", updatePlayersLobby(players));
 
 
 // Call the function to display the players in the lobby
-updatePlayersLobby(players);
+//updatePlayersLobby(players);
 if(document.title==="5 Crowns - Welcome"){
 document.addEventListener("DOMContentLoaded", () => {
     // Select the Start Game button
