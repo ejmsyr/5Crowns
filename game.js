@@ -33,7 +33,8 @@ function pickRandomPlayer(plAr) {
 function updateTurnIndicator(plAr) {
     const turnIndicator = document.getElementById("turn-indicator");
     if (turnIndicator) {
-        turnIndicator.textContent = `${pickRandomPlayer[currentPlayerIndex]}'s Turn`;
+        turnIndicator.textContent = `${plAr[currentPlayerIndex]}'s Turn`;
+        console.log(plAr[currentPlayerIndex])
     } else {
         console.error("Turn indicator element not found.");
     }
@@ -47,15 +48,53 @@ function switchToNextPlayer(players) {
 
 // Initialize the gameplay turn logic
 document.addEventListener("DOMContentLoaded", () => {
-        initializeDeck();
-        const playerArray = JSON.parse(localStorage.getItem("playerArray")) || []; // Fallback players
-        currentPlayerIndex = pickRandomPlayer(playerArray); // Start with a random player
-        updateTurnIndicator(playerArray);
+    initializeDeck();
+   // const plAr = JSON.parse(localStorage.getItem("playerArray")) || []; // Fallback players
+    currentPlayerIndex = pickRandomPlayer(plAr); // Start with a random player
+    updateTurnIndicator(plAr);
 
-        // Switch to the next player on click
-        document.body.addEventListener("click", () => {
-            switchToNextPlayer(playerArray);
-            console.log(playerArray);
-            console.log(plAr[currentPlayerIndex]);
-        });
+    // Switch to the next player on click
+    document.body.addEventListener("click", () => {
+        switchToNextPlayer(plAr);
+        console.log(plAr);
+        console.log(plAr[currentPlayerIndex]);
+    });
 });
+
+
+class PlayingCard {
+    constructor(suit, rank) {
+        this.suit = suit;
+        this.rank = rank;
+    }
+
+    // Generate the card HTML element
+    generateCardElement() {
+        const card = document.createElement('div');
+        card.classList.add('playing-card', `suit-${this.suit}`);
+        card.innerHTML = `
+            <div class="card-corner top-left">${this.rank}</div>
+            <div class="card-symbol">${this.getSuitSymbol()}</div>
+            <div class="card-corner bottom-right">${this.rank}</div>
+        `;
+        return card;
+    }
+
+    // Get the visual symbol for the suit
+    getSuitSymbol() {
+        const symbols = {
+            S: '♠', // Spades
+            s: '★', // Golden Star
+            C: '♣', // Clubs
+            D: '♦', // Diamonds
+            H: '♥', // Hearts
+        };
+        return symbols[this.suit] || '';
+    }
+}
+
+// Export a function to create cards dynamically
+function createCard(suit, rank) {
+    const card = new PlayingCard(suit, rank);
+    return card.generateCardElement();
+}

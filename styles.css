@@ -63,29 +63,108 @@ button:hover {
     padding: 1.5em;
     border-radius: 20px;
     box-shadow: 0 10px 10px rgba(0, 2, 0, 0.3);
-    width: 200px; /* Increased width for better text fit */
-    margin: 1em auto; /* Centering with margin */
+    width: 200px;
+    /* Increased width for better text fit */
+    margin: 1em auto;
+    /* Centering with margin */
 }
 
 .startgamebox h1 {
-    font-size: 1.5rem; /* Adjusted font size for better fit */
+    font-size: 1.5rem;
+    /* Adjusted font size for better fit */
     margin: 0;
 }
+
 /* Large central table with trapezoidal perspective */
 .game-table {
-    width: 90%; /* Larger table width */
-    height: 70%; /* Larger table height */
-    margin: auto; /* Centers horizontally */
+    width: 90%;
+    /* Larger table width */
+    height: 70%;
+    /* Larger table height */
+    margin: auto;
+    /* Centers horizontally */
     position: absolute;
-    background: #34495e; /* Matches the container color */
-    border-radius: 10px; /* Rounded edges */
-    border: 10px solid #2c3e50; /* Thicker border for definition */
-    box-shadow: 0 12px 200px rgba(0, 0, 0, 0.6); /* Adds depth */
-    transform-origin: bottom center; /* Tilts from the bottom */
+    background: #34495e;
+    /* Matches the container color */
+    border-radius: 10px;
+    /* Rounded edges */
+    border: 10px solid #2c3e50;
+    /* Thicker border for definition */
+    box-shadow: 0 12px 200px rgba(0, 0, 0, 0.6);
+    /* Adds depth */
+    transform-origin: bottom center;
+    /* Tilts from the bottom */
 }
+
 #turn-indicator {
+    position: absolute; /* Position relative to the nearest positioned ancestor */
+    top: 5%; /* Distance from the top of the page */
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 355%;
     color: white;
-    margin-top: 20px;
+    margin-top: 2px;
+    z-index: 100;
+}
+/* General card styling */
+.playing-card {
+    width: 80px;
+    height: 120px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background-color: white;
+    position: relative;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Corner text styling */
+.card-corner {
+    position: absolute;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-corner.top-left {
+    top: 5px;
+    left: 5px;
+}
+
+.card-corner.bottom-right {
+    bottom: 5px;
+    right: 5px;
+    transform: rotate(180deg);
+}
+
+/* Center symbol styling */
+.card-symbol {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+/* Suit-specific styles */
+.suit-S .card-symbol {
+    color: black; /* Spades */
+}
+
+.suit-s .card-symbol {
+    color: gold; /* Golden star */
+}
+
+.suit-C .card-symbol {
+    color: green; /* Clubs */
+}
+
+.suit-D .card-symbol {
+    color: red; /* Diamonds */
+}
+
+.suit-H .card-symbol {
+    color: red; /* Hearts */
 }
