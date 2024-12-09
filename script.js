@@ -34,6 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Start Game button not found.");
         }
     } else {
+        console.log("Clearing game state and cache...");
+            localStorage.removeItem("gameState");       // Remove game state
+            localStorage.removeItem("selectedCard");   // Remove selected card
+            localStorage.removeItem("discardPile");    // Remove discard pile
+            localStorage.removeItem("deck");           // Remove deck
+            localStorage.removeItem("playerHands");    // Remove player hands
+            localStorage.removeItem("playerArray");    // Remove player array
         const defaultPlayer = ["Trace"];
         localStorage.setItem("playerArray", JSON.stringify(defaultPlayer));
         console.log("Player array reset to:", defaultPlayer);
