@@ -120,6 +120,10 @@ button:hover {
     padding: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+.selected-card {
+    border: 3px solid gold;
+    box-shadow: 0 0 10px gold;
+}
 
 /* Corner text styling */
 .card-corner {
