@@ -3,6 +3,7 @@ let currentPlayerIndex = 0;
 let lastDiscardedCard = null;
 let selectedCardIndex = null; // Tracks the index of the selected card
 let cardIdCounter = 0; // Global counter for unique card IDs
+const meldManager = new MeldManager();
 
 //Deck
 
@@ -116,7 +117,10 @@ function setupCardSelection(player) {
                     console.log(`Switched cards: ${hands[player][selectedCardIndex]} with ${hands[player][index]}`);
 
                     // Refresh visuals after swapping
-                    checkMeld(player,0,0,0);
+                    console.log(`Player ${player} hand before meld check:`, hands[player]);
+
+                    meldManager.checkMelds(player);
+                    meldManager.highlightMelds(player);
                     setupCardSelection(player);
                 }
             } else {
@@ -232,7 +236,8 @@ function drawCard(player) {
     localStorage.setItem("deck", JSON.stringify(deck));
     localStorage.setItem("playerHands", JSON.stringify(hands));
     console.log(`Player ${player} drew a card:`, card);
-    checkMeld(player,1,0);
+    meldManager.checkMelds(player);
+    meldManager.highlightMelds(player);
     // Refresh hand display
     setupCardSelection(player);
 }
@@ -260,7 +265,8 @@ function drawFromDiscard(player) {
     localStorage.setItem("discard", JSON.stringify(null)); // Clear discard pile
     localStorage.setItem("playerHands", JSON.stringify(hands));
     console.log(`Player ${player} drew a card from the discard pile:`, discard);
-    checkMeld(player,1,0);
+    meldManager.checkMelds(player);
+    meldManager.highlightMelds(player);
     // Refresh visuals and hand
     updateDiscardVisual();
     setupCardSelection(player);
@@ -321,181 +327,6 @@ function displayPlayerHand(player) {
     console.log(`Displayed hand for player ${player}:`, hands[player]);
 }
 
-//Melds
-const rankOrder = ['3', '4', '5', '6', '7', '8', '9', '10', 'j', 'q', 'k', 'J'];
-function initializeMelds(player) {
-    const allMelds = JSON.parse(localStorage.getItem("playerMelds")) || {};
-
-   
-    allMelds[player] = {
-        meldGroup1: {cards: [] },
-        meldGroup2: {cards: [] },
-        meldGroup3: {cards: [] },
-        meldGroup4: {cards: [] }
-    };
-        localStorage.setItem("playerMelds", JSON.stringify(allMelds));
-        console.log(`Initialized melds for player: ${player}`);
-    
-}
-function getRandomPrimaryColor() {
-    const colors = ['red', 'blue', 'green', 'purple'];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    console.log(`Assigned random color: ${randomColor}`);
-    return randomColor;
-}
-function addToMeld(player, groupIndex, card) {
-    // Retrieve player melds from localStorage
-
-    const allMelds = JSON.parse(localStorage.getItem("playerMelds")) || {};
-
-    if (!allMelds[player]) {
-        console.error(`Melds for player ${player} not found. Initialize the player first.`);
-        return;
-    }
-
-    const groupKey = `meldGroup${groupIndex}`;
-    if (!allMelds[player][groupKey]) {
-        console.error(`Invalid meld group: ${groupKey}`);
-        return;
-    }
-
-    // Add the card to the specified meld group
-    allMelds[player][groupKey].cards.push(card);
-
-    // Save back to localStorage
-    localStorage.setItem("playerMelds", JSON.stringify(allMelds));
-
-    console.log(`Added card to ${groupKey} for player ${player}:`, card);
-}
-function checkMeld(player, groupIndex, snn) {
-    initializeMelds(player);
-    const hands = JSON.parse(localStorage.getItem("playerHands")) || {};
-
-    if (snn >= hands[player].length - 1) {
-        console.log("No more cards to check.");
-        return;
-    }
-
-    const [s1, r1] = [hands[player][snn].value[0], hands[player][snn].value.slice(1)];
-    const [s2, r2] = [hands[player][snn+1].value[0], hands[player][snn+1].value.slice(1)];
-    const rankI1 = rankOrder.indexOf(r1);
-    const rankI2 = rankOrder.indexOf(r2);
-
-    if (s1 === s2 && rankI2 - rankI1 === 1) {
-        const lastIndex = meldStraight(player, snn, groupIndex);
-        if (lastIndex !== 0) {
-            checkMeld(player, groupIndex + 1, lastIndex + 1);
-            console.log("this is a straight");
-        }
-        console.log('Found a straight.');
-    } else if (r1 === r2) {
-        const lastIndex = meldFlush(player, snn, groupIndex);
-        if (lastIndex !== 0) {
-            checkMeld(player, groupIndex + 1, lastIndex + 1);
-            console.log("Now this this a flush");
-        }
-        console.log('Found a flush.');
-    }
-
-    // Highlight meld groups after checking melds
-    highlightMeldCards(player);
-
-    pMelds();
-}
-function meldStraight(player, indexCard, groupIndex) {
-    const hands = JSON.parse(localStorage.getItem("playerHands")) || {};
-    let i = indexCard;
-
-    while (
-        hands[player][i].value[0] === hands[player][i+1].value[0] && // Compare suits
-        rankOrder.indexOf(hands[player][i+1].value.slice(1)) - rankOrder.indexOf(hands[player][i].value.slice(1)) === 1 // Check consecutive ranks
-    ) {
-        i++;
-    }
-
-    if (i >= indexCard + 2) {
-        for (let j = indexCard; j <= i; j++) {
-            addToMeld(player, groupIndex, hands[player][j]);
-        }
-        return i;
-    } else {
-        return 0;
-    }
-}
-
-
-function meldFlush(player, indexCard, groupIndex) {
-    const hands = JSON.parse(localStorage.getItem("playerHands")) || {};
-    let i = indexCard;
-
-    while (
-        hands[player][i].value.slice(1) === hands[player][i+1].value.slice(1) // Compare ranks
-    ) {
-        i++;
-    }
-
-    if (i >= indexCard + 2) {
-        for (let j = indexCard; j <= i; j++) {
-            addToMeld(player, groupIndex, hands[player][j]);
-        }
-        return i;
-    } else {
-        return 0;
-    }
-}
-
-function highlightMeldCards(player) {
-    // Retrieve player melds from localStorage
-    const allMelds = JSON.parse(localStorage.getItem("playerMelds")) || {};
-
-    if (!allMelds[player]) {
-      //  console.error(`Melds for player ${player} not found.`);
-        return;
-    }
-
-    // Assign a random color to each meld group
-    Object.keys(allMelds[player]).forEach((groupKey, index) => {
-        const group = allMelds[player][groupKey];
-        const color = getRandomPrimaryColor();
-
-        group.cards.forEach(card => {
-            const cardElement = document.querySelector(`[data-card-id="${card.id}"]`);
-            if (cardElement) {
-                cardElement.style.border = `3px solid ${color}`;
-                cardElement.style.boxShadow = `0 0 10px ${color}`;
-            } else {
-                console.warn(`Card with ID ${card.id} not found in the DOM.`);
-            }
-        });
-    });
-}
-
-function pMelds() {
-    const allMelds = JSON.parse(localStorage.getItem("playerMelds")) || {};
-
-    if (Object.keys(allMelds).length === 0) {
-        console.log("No meld groups found in local storage.");
-        return;
-    }
-
-    Object.keys(allMelds).forEach(player => {
-        console.log(`Player: ${player}`);
-        Object.keys(allMelds[player]).forEach(groupKey => {
-            const cards = allMelds[player][groupKey].cards;
-            console.log(`  ${groupKey}:`);
-            if (cards.length === 0) {
-                console.log(`    (No cards)`);
-            } else {
-                cards.forEach(card => {
-                    console.log(`    ${card.value} (ID: ${card.id})`);
-                });
-            }
-        });
-    });
-}
-
-
-
 //On Load
 document.addEventListener("DOMContentLoaded", () => {
     const gameState = initializeGameState();
@@ -533,6 +364,8 @@ document.getElementById('discard').addEventListener('click', () => {
         updateGameState({ currentPlayerIndex: nextPlayerIndex, drawMode: true });
         updateTurnIndicator(plAr);
         displayPlayerHand(plAr[nextPlayerIndex]);
+        meldManager.checkMelds(currentPlayer);
+      meldManager.highlightMelds(currentPlayer);
     }
 });
 
@@ -565,3 +398,4 @@ class PlayingCard {
         return symbols[this.suit] || '';
     }
 }
+
