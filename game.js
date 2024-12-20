@@ -3,7 +3,6 @@ let currentPlayerIndex = 0;
 let lastDiscardedCard = null;
 let selectedCardIndex = null; // Tracks the index of the selected card
 let cardIdCounter = 0; // Global counter for unique card IDs
-const meldManager = new MeldManager();
 
 //Deck
 
@@ -118,9 +117,7 @@ function setupCardSelection(player) {
 
                     // Refresh visuals after swapping
                     console.log(`Player ${player} hand before meld check:`, hands[player]);
-
-                    meldManager.checkMelds(player);
-                    meldManager.highlightMelds(player);
+                    checkMeld(hands[player],0);
                     setupCardSelection(player);
                 }
             } else {
@@ -236,8 +233,6 @@ function drawCard(player) {
     localStorage.setItem("deck", JSON.stringify(deck));
     localStorage.setItem("playerHands", JSON.stringify(hands));
     console.log(`Player ${player} drew a card:`, card);
-    meldManager.checkMelds(player);
-    meldManager.highlightMelds(player);
     // Refresh hand display
     setupCardSelection(player);
 }
@@ -265,8 +260,6 @@ function drawFromDiscard(player) {
     localStorage.setItem("discard", JSON.stringify(null)); // Clear discard pile
     localStorage.setItem("playerHands", JSON.stringify(hands));
     console.log(`Player ${player} drew a card from the discard pile:`, discard);
-    meldManager.checkMelds(player);
-    meldManager.highlightMelds(player);
     // Refresh visuals and hand
     updateDiscardVisual();
     setupCardSelection(player);
@@ -334,6 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeDiscard();
     initializePlayerHands(plAr);
     updateTurnIndicator(plAr);
+    initializeMelds(plAr);
     plAr.forEach(player => dealCardsToPlayer(player, 15));
     displayPlayerHand(plAr[gameState.currentPlayerIndex]);
 });
@@ -364,8 +358,6 @@ document.getElementById('discard').addEventListener('click', () => {
         updateGameState({ currentPlayerIndex: nextPlayerIndex, drawMode: true });
         updateTurnIndicator(plAr);
         displayPlayerHand(plAr[nextPlayerIndex]);
-        meldManager.checkMelds(currentPlayer);
-      meldManager.highlightMelds(currentPlayer);
     }
 });
 
