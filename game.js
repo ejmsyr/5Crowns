@@ -118,6 +118,7 @@ function setupCardSelection(player) {
                     // Refresh visuals after swapping
                 //    console.log(`Player ${player} hand before meld check:`, hands[player]);
                     checkMeld(player,hands[player],0,1);
+                    checkRound();
                     // makeItKnown(player);
                     setupCardSelection(player);
                 }
@@ -174,6 +175,7 @@ function initializeGameState() {
     const defaultState = {
         currentPlayerIndex: pickRandomPlayer(plAr), // Randomly pick the starting player
         drawMode: true, // Ensure draw mode starts as true
+        Round: 1
     };
 
     const gameState = JSON.parse(localStorage.getItem("gameState")) || defaultState;
@@ -276,7 +278,7 @@ function updateTurnIndicator(players) {
     const gameState = getGameState();
     const turnIndicator = document.getElementById("turn-indicator");
     if (turnIndicator) {
-        turnIndicator.textContent = `${players[gameState.currentPlayerIndex]}'s Turn`;
+        turnIndicator.textContent = `${players[gameState.currentPlayerIndex]}'s Turn    Round: ${gameState.Round}`;
         console.log(`${players[gameState.currentPlayerIndex]}'s Turn`);
     } else {
         console.error("Turn indicator not found.");
@@ -329,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializePlayerHands(plAr);
     updateTurnIndicator(plAr);
     plAr.forEach(player => initializeMelds(player));
-    plAr.forEach(player => dealCardsToPlayer(player, 15));
+    plAr.forEach(player => dealCardsToPlayer(player, 3));
     displayPlayerHand(plAr[gameState.currentPlayerIndex]);
 });
 document.getElementById('new-card').addEventListener('click', () => {
