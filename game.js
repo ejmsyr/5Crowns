@@ -27,7 +27,7 @@ function generateDeck() {
 function initializeDeck() {
         const deck = generateDeck();
         localStorage.setItem("deck", JSON.stringify(deck));
-        console.log("Deck initialized:", deck);
+  //      console.log("Deck initialized:", deck);
 
 }
 
@@ -39,7 +39,7 @@ function initializeDiscard() {
     lastDiscardedCard = deck.splice(Math.floor(Math.random()*deck.length),1)[0];
     localStorage.setItem("deck", JSON.stringify(deck));
     localStorage.setItem("discard", JSON.stringify(lastDiscardedCard)); // Initialize discard pile as array
-    console.log(lastDiscardedCard);
+  //  console.log(lastDiscardedCard);
     updateDiscardVisual();
 }
 function updateDiscardVisual() {
@@ -113,11 +113,12 @@ function setupCardSelection(player) {
                     localStorage.setItem("playerHands", JSON.stringify(hands));
                     selectedCardId = null;
                     localStorage.removeItem("selectedCardId");
-                    console.log(`Switched cards: ${hands[player][selectedCardIndex]} with ${hands[player][index]}`);
+//                    console.log(`Switched cards: ${hands[player][selectedCardIndex]} with ${hands[player][index]}`);
 
                     // Refresh visuals after swapping
-                    console.log(`Player ${player} hand before meld check:`, hands[player]);
-                    checkMeld(hands[player],0);
+                //    console.log(`Player ${player} hand before meld check:`, hands[player]);
+                    checkMeld(player,hands[player],0,1);
+                    // makeItKnown(player);
                     setupCardSelection(player);
                 }
             } else {
@@ -128,7 +129,7 @@ function setupCardSelection(player) {
                 // Highlight the selected card
                 playerHandContainer.querySelectorAll('.playing-card').forEach(el => el.classList.remove('selected-card'));
                 cardElement.classList.add('selected-card');
-                console.log(`Card selected: ${selectedCardId}`);
+              //  console.log(`Card selected: ${selectedCardId}`);
             }
         };
 
@@ -207,7 +208,7 @@ function dealCardsToPlayer(player, cardCount) {
 
     localStorage.setItem("deck", JSON.stringify(deck));
     localStorage.setItem("playerHands", JSON.stringify(hands));
-    console.log(`Dealt ${cardCount} cards to ${player}:`, hands[player]);
+ //   console.log(`Dealt ${cardCount} cards to ${player}:`, hands[player]);
 }
 function drawCard(player) {
     const deck = JSON.parse(localStorage.getItem("deck")) || [];
@@ -287,7 +288,7 @@ function initializePlayerHands(players) {
         hands[player] = [];
     });
     localStorage.setItem("playerHands", JSON.stringify(hands));
-    console.log("Player hands initialized:", hands);
+///    console.log("Player hands initialized:", hands);
 }
 function displayPlayerHand(player) { 
     const playerHandContainer = document.getElementById('player-hand');
@@ -327,7 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeDiscard();
     initializePlayerHands(plAr);
     updateTurnIndicator(plAr);
-    initializeMelds(plAr);
+    plAr.forEach(player => initializeMelds(player));
     plAr.forEach(player => dealCardsToPlayer(player, 15));
     displayPlayerHand(plAr[gameState.currentPlayerIndex]);
 });
