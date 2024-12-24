@@ -45,18 +45,19 @@ function setUpRound(round) {
 function checkRound() {
   const gameState = JSON.parse(localStorage.getItem("gameState")) || {};
   const currentPlayerIndex = gameState.currentPlayerIndex;
-  const playerNames = JSON.parse(localStorage.getItem("playerNames")) || [];
+  const playerNames = JSON.parse(localStorage.getItem("playerArray")) || [];
   const currentPlayer = playerNames[currentPlayerIndex];
   const playerHands = JSON.parse(localStorage.getItem("playerHands")) || {};
   const currentHand = playerHands[currentPlayer] || [];
 
   // Check if all cards except the last are part of a meld
-  const melds = JSON.parse(localStorage.getItem("playerMelds")) || {};
-  const playerMelds = melds[currentPlayer] || [];
+  let melds = JSON.parse(localStorage.getItem("playerMelds"));
+  const playerMelds = melds[currentPlayer];
 
-  if(melds[currentPlayerIndex][1].length+melds[currentPlayerIndex][2].length+melds[currentPlayerIndex][3].length+melds[currentPlayerIndex][4].lengthnn===gameState.Round+2){
-    
-  
+  if(playerMelds[1].length+playerMelds[2].length+playerMelds[3].length+playerMelds[4].length===gameState.Round+2){
+    console.log("Running");
+    localStorage.setItem("endMode", JSON.stringify(true)); // Save the game state
+
       const endGameButton = document.createElement("button");
       endGameButton.textContent = "End Game";
       endGameButton.onclick = () => {

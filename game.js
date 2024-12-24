@@ -180,6 +180,7 @@ function initializeGameState() {
 
     const gameState = JSON.parse(localStorage.getItem("gameState")) || defaultState;
     localStorage.setItem("gameState", JSON.stringify(gameState)); // Save the game state
+    localStorage.setItem("endMode", JSON.stringify(false)); // Save the game state
     return gameState;
 }
 function updateGameState(updates) {
@@ -331,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializePlayerHands(plAr);
     updateTurnIndicator(plAr);
     plAr.forEach(player => initializeMelds(player));
-    plAr.forEach(player => dealCardsToPlayer(player, 3));
+    plAr.forEach(player => dealCardsToPlayer(player, 10));
     displayPlayerHand(plAr[gameState.currentPlayerIndex]);
 });
 document.getElementById('new-card').addEventListener('click', () => {
